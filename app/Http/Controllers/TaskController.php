@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -14,8 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-
-        $tasks = Task::latest()->get();
+        $tasks = Task::where('user_id', Auth::id())->latest()->get();
         return view('tasks', get_defined_vars());
     }
 
@@ -35,10 +36,11 @@ class TaskController extends Controller
     {
         $fields = $request->validate([
             'body' => 'required|string|max:255',
-            'category' => 'required|string|max:255'
+            'category' => 'required|string|max:255',
+            'status' => 'required|in:In Progress,Completed',
         ]);
-        // $task = new Task;
-        // dd($task);
+        $fields['user_id'] = Auth::id();
+        // $task = new Task();
         // $task->body = $fields['body'];
         // $task->category = $fields['category'];
         // $task->save();
@@ -62,12 +64,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task, UpdateTaskRequest $request)
     {
-        $fields = $request->validate([
-            'body' => 'required|string|max:255',
-            'category' => 'required|string|max:255'
-        ]);
-        $task->update($fields);
-        return redirect('/tasks');
+
     }
 
     /**
@@ -75,7 +72,18 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        return "edit";
+        $fields = $request->validate([
+            'body' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+        ]);
+        $task->update($fields);
+        $arr = [];
+        foreach (explode(",", $fields['category']) as $singleCategory) {
+            $createdTask = Category::firstOrCreate(['name' => $singleCategory]);
+            $arr[] = $createdTask->id;
+        }
+        $task->categories()->sync($arr);
+        return redirect('/tasks');
     }
 
     /**
@@ -86,5 +94,17 @@ class TaskController extends Controller
         $task->delete();
         return redirect('/tasks');
 
+    }
+
+    public function updateStatus(Task $task)
+    {
+        // dd("update Status");
+
+        if ($task->status == 'In Progress') {
+            $task->update(['status' => 'Completed']);
+        } else {
+            $task->update(['status' => 'In Progress']);
+        }
+        return redirect('/tasks');
     }
 }
