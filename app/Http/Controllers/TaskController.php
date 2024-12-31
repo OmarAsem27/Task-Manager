@@ -39,13 +39,15 @@ class TaskController extends Controller
             'category' => 'required|string|max:255',
             'status' => 'required|in:In Progress,Completed',
         ]);
-        $fields['user_id'] = Auth::id();
-        // $task = new Task();
-        // $task->body = $fields['body'];
-        // $task->category = $fields['category'];
-        // $task->save();
+
+        // to avoid the Auth::id() error
+        if (request()->is('web/*') || !request()->is('api/*')) {
+            $fields['user_id'] = Auth::guard('web')->id();
+        } else {
+            $fields['user_id'] = Auth::guard('api')->id();
+        }
+
         $task = Task::create($fields);
-        // $task->categories()->create(['name' => $fields['category']]);
         $task->category($fields['category']);
         return redirect('/tasks');
 
@@ -98,7 +100,6 @@ class TaskController extends Controller
 
     public function updateStatus(Task $task)
     {
-        // dd("update Status");
 
         if ($task->status == 'In Progress') {
             $task->update(['status' => 'Completed']);

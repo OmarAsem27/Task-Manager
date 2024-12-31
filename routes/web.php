@@ -13,15 +13,16 @@ Route::get('/', function () {
 //     return view('tasks');
 // });
 
+Route::middleware('web')->group(function () {
+    Route::resource('tasks', TaskController::class);
 
-Route::resource('tasks', TaskController::class);
+    Route::put('tasks/{task}/change-status', [TaskController::class, 'updateStatus'])->name('status');
 
-Route::put('tasks/{task}/change-status', [TaskController::class, 'updateStatus'])->name('status');
+    Route::get('register', [RegistrationController::class, 'register']);
+    Route::post('register', [RegistrationController::class, 'store']);
 
-Route::get('register', [RegistrationController::class, 'register']);
-Route::post('register', [RegistrationController::class, 'store']);
+    Route::get('login', [SessionController::class, 'create']);
+    Route::post('login', [SessionController::class, 'store']);
 
-Route::get('login', [SessionController::class, 'create']);
-Route::post('login', [SessionController::class, 'store']);
-
-Route::post('logout', [SessionController::class, 'destroy']);
+    Route::post('logout', [SessionController::class, 'destroy']);
+});
