@@ -34,7 +34,7 @@
                         @enderror
 
                         <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                            Don’t have an account yet? <a href="#"
+                            Don’t have an account yet? <a href="{{route('web.register')}}"
                                 class="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign up</a>
                         </p>
                     </form>

@@ -18,10 +18,10 @@ Route::middleware('web')->group(function () {
 
     Route::put('tasks/{task}/change-status', [TaskController::class, 'updateStatus'])->name('status');
 
-    Route::get('register', [RegistrationController::class, 'register']);
+    Route::get('register', [RegistrationController::class, 'register'])->name('web.register');
     Route::post('register', [RegistrationController::class, 'store']);
 
-    Route::get('login', [SessionController::class, 'create']);
+    Route::get('login', [SessionController::class, 'create'])->name('web.login');
     Route::post('login', [SessionController::class, 'store']);
 
     Route::post('logout', [SessionController::class, 'destroy']);

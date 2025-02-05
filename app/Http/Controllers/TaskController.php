@@ -8,16 +8,30 @@ use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+// use App\Http\Controllers\Controller;
 
 class TaskController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tasks = Task::where('user_id', Auth::id())->latest()->get();
-        return view('tasks', get_defined_vars());
+        $user = auth()->user();
+
+        if (!$user || !auth()->user()->can('view tasks')) {
+            abort(403);
+        }
+
+        // if the user is Admin
+        if ($user->hasPermissionTo('view all tasks')) {
+            $tasks = Task::all();
+        } else {
+            $tasks = Task::where('user_id', $user->id)->get();
+        }
+
+        return view('tasks', compact('tasks'));
     }
 
     /**
@@ -34,6 +48,9 @@ class TaskController extends Controller
     // public function store(Request $request)
     public function store(StoreTaskRequest $request)
     {
+        if (!auth()->user()->can('create tasks')) {
+            abort(403);
+        }
         $fields = $request->validate([
             'body' => 'required|string|max:255',
             'category' => 'required|string|max:255',
@@ -74,6 +91,9 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
+        if (!auth()->user()->can('edit tasks')) {
+            abort(403);
+        }
         $fields = $request->validate([
             'body' => 'required|string|max:255',
             'category' => 'required|string|max:255',
@@ -93,6 +113,9 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        if (!auth()->user()->can('delete tasks')) {
+            abort(403);
+        }
         $task->delete();
         return redirect('/tasks');
 
@@ -100,7 +123,9 @@ class TaskController extends Controller
 
     public function updateStatus(Task $task)
     {
-
+        if (!auth()->user()->can('edit tasks')) {
+            abort(403);
+        }
         if ($task->status == 'In Progress') {
             $task->update(['status' => 'Completed']);
         } else {

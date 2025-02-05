@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
+use Spatie\Permission\Models\Role;
 
 class RegistrationController extends Controller
 {
@@ -23,6 +24,8 @@ class RegistrationController extends Controller
             'password' => ['required', Password::min(6), 'confirmed']
         ]);
         $user = User::create($fields);
+        $user->assignRole('user');  // laravel permission
+
         Auth::login($user);
         return redirect('/tasks');
     }
