@@ -2,7 +2,7 @@
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-700">Let's Do Some Work</h1>
+        <h1 class="text-4xl font-bold text-gray-700">{{ __("Let's Do Some Work") }}</h1>
         <button data-modal-target="add-new-task" data-modal-toggle="add-new-task"
             class="p-3 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-6 h-6">
@@ -12,6 +12,16 @@
             </svg>
         </button>
     </div>
+
+    @if ($errors->any())
+        <div class="">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li class="bg-red-400 p-2">{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <!-- Task List -->
     <div>

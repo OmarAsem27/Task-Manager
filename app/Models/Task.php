@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Translatable\HasTranslations;
 
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
+
+
+    public $translatable = ['body', 'status'];
 
     protected $fillable = [
         'body',

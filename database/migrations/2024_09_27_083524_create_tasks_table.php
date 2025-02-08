@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->string('body');
+            $table->text('body');
             $table->enum('status', ['In Progress', 'Completed'])->default('In Progress');
             $table->timestamps();
         });
