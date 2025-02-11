@@ -14,23 +14,22 @@
     </div>
 
     @if ($errors->any())
-        <div class="">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li class="bg-red-400 p-2">{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50">{{ $error }}</li>
+            @endforeach
+        </ul>
     @endif
 
     <!-- Task List -->
     <div>
         @if ($tasks)
             @foreach ($tasks as $task)
-                <div class="bg-white rounded-lg shadow p-6 mb-4">
+                <div class="bg-gray-100 rounded-lg shadow p-6 mb-4 ">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-lg font-semibold">{{ $task->body }}</p>
+                            <a href="{{ route('tasks.show', $task) }}"
+                                class="text-xl font-semibold hover:text-blue-700">{{ $task->body }}</a>
                             <p class="text-sm text-gray-500">
                                 Status: <span class="font-medium">{{ $task->status }}</span>
                             </p>

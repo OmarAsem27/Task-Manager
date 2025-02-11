@@ -7,10 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
 
     @vite('resources/css/app.css')
 
-    <title>Task Manager</title>
+    <title> {{ __('Task Manager') }}</title>
 </head>
 
 <body class="">
@@ -19,7 +22,7 @@
     {{-- Start of navbar --}}
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="/tasks" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <a href="{{ route('home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
                 <span
                     class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">{{ __('Task Manager') }}</span>
@@ -71,7 +74,7 @@
                             {{ Auth::user()->name }}
                         </li>
                         <li class="text-white mx-2 font-semibold">
-                            <form action="/logout" method="POST">
+                            <form action="{{ route('web.logout') }}" method="POST">
                                 @csrf
                                 <button type="submit">{{ __('Logout') }}</button>
                             </form>
@@ -79,10 +82,10 @@
                     @endauth
                     @guest
                         <li class="text-white mx-2 font-semibold">
-                            <a href="/login">Log in</a>
+                            <a href="{{ route('web.login') }}"> {{ __('Login') }}</a>
                         </li>
                         <li class="text-white mx-2 font-semibold">
-                            <a href="/register">Register</a>
+                            <a href="{{ route('web.register') }}"> {{ __('Register') }}</a>
                         </li>
                     @endguest
                 </ul>

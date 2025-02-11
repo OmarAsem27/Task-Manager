@@ -13,6 +13,9 @@ class SessionController extends Controller
 
     public function create()
     {
+        if(Auth::check()){
+            return redirect()->route('home');
+        }
         return view('auth.login');
     }
 
@@ -31,12 +34,12 @@ class SessionController extends Controller
 
         request()->session()->regenerate();
 
-        return redirect('/tasks');
+        return redirect()->route('home');
     }
 
     public function destroy()
     {
         Auth::logout();
-        return redirect('/tasks');
+        return redirect()->route('home');
     }
 }

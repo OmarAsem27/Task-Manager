@@ -12,7 +12,7 @@ class Task extends Model
     use HasFactory, HasTranslations;
 
 
-    public $translatable = ['body', 'status'];
+    public $translatable = ['body'];
 
     protected $fillable = [
         'body',

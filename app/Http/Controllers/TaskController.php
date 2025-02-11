@@ -66,7 +66,7 @@ class TaskController extends Controller
 
         $task = Task::create($fields);
         $task->category($fields['category']);
-        return redirect('/tasks');
+        return redirect()->route('home');
 
     }
 
@@ -75,7 +75,9 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        // dd(request()->route());  // Debugging route details inside the controller
+
+        return view('show',compact('task'));
     }
 
     /**
@@ -105,7 +107,7 @@ class TaskController extends Controller
             $arr[] = $createdTask->id;
         }
         $task->categories()->sync($arr);
-        return redirect('/tasks');
+        return redirect()->route('home');
     }
 
     /**
@@ -117,7 +119,7 @@ class TaskController extends Controller
             abort(403);
         }
         $task->delete();
-        return redirect('/tasks');
+        return redirect()->route('home');
 
     }
 
@@ -131,6 +133,6 @@ class TaskController extends Controller
         } else {
             $task->update(['status' => 'In Progress']);
         }
-        return redirect('/tasks');
+        return redirect()->route('home');
     }
 }
